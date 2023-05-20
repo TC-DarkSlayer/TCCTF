@@ -85,12 +85,29 @@ void onTick(CBlob@ this)
 		{
 			if (this.isKeyJustPressed(key_action3) && !isknocked)
 			{
+				//CAttachment@ att = this.getAttachments();
+				//print("fumes is attached:" + this.isAttached() + " attach points " + this.getAttachmentPointCount() );
+				
+				CBlob@ jumpblob = this;
+				
+				if(this.isAttached()){
+					AttachmentPoint@ point = this.getAttachments().getAttachmentPointByName("DRIVER");
+					if (point !is null){
+						CBlob@ holder = point.getOccupied();
+						if (holder !is null) {
+							//print("holdername:" + holder.getName());
+							@jumpblob = @holder;
+							//print("jumpblob:" + jumpblob.getName());
+						}
+					}
+				}
+				
 				Vec2f vel = this.getAimPos() - this.getPosition();
 				vel.Normalize();
 				vel.x *= 2.00f;
 				vel.y = -6.00f;
 			
-				this.setVelocity((this.getVelocity() * 0.25f) + vel);
+				jumpblob.setVelocity((jumpblob.getVelocity() * 0.25f) + vel);
 
 				this.getSprite().PlaySound("Fumes_Fly.ogg");
 				this.set_u32("nextFumesJump", getGameTime() + 10);
@@ -139,3 +156,23 @@ void onTick(CBlob@ this)
 	// print("" + true_level);
 	// print("" + (1.00f / (level)));
 }
+
+//void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint)
+//{
+	//print("fumes:" + attached.getName() +  ", " + attachedPoint.name + ", socket" + attachedPoint.socket);
+	
+	/*if (attachedPoint.socket)
+	{
+		SetOccupied(attachedPoint, 1);
+		attached.Tag("seated");
+		Sound::Play("GetInVehicle.ogg", attached.getPosition());
+
+		if (this.getDamageOwnerPlayer() is null) 
+		{
+			if (attachedPoint.name.find("PASSENGER") == -1)
+			{
+				this.SetDamageOwnerPlayer(attached.getPlayer());
+			}
+		}
+	}*/
+//}
